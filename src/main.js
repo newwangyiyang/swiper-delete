@@ -13,10 +13,13 @@ import axios from './axios/http';
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
 
+
+import store from './vuex/store.js';
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

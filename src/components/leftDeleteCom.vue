@@ -10,7 +10,7 @@
         <!-- 插槽中放具体项目中需要内容     -->  
           <slot></slot>
           </div>
-          <div class="remove" ref='remove' @click.stop="deleteLis(index)">
+          <div class="remove" ref='remove' @click.stop="deleteArrIndex(index)">
             删除
           </div>
       </div>
@@ -49,6 +49,7 @@
 }
 </style>
 <script>
+import {mapMutations} from 'vuex';
 export default {
   data() {
     return {
@@ -111,9 +112,7 @@ export default {
         }
       }
     },
-    deleteLis(index) {
-        this.$emit('deleteOne', index);
-    }
+    ...mapMutations(['deleteArrIndex'])
   },
   props: ["index"]
 };

@@ -4,8 +4,8 @@
           <span>填写您的工作总结</span>
           <span @click="addNewContent">再添加一条</span>
       </div>
-      <fillAssess v-for="(item, index) in scoreAndSummaryList" v-if="item" :key="index" :index="index" :indexData.sync="item" @deleteArrIndex="deleteArrIndex"/>
-      <div class="submit_all_btn" @click="allSubmit">
+      <fillAssess v-for="(item, index) in scoreAndSummaryList" v-if="item" :key="item._id" :index="index" :indexData.sync="item"/>
+      <div class="submit_all_btn">
           <a href="javascript:;">提交全部</a>
       </div>
   </div>
@@ -14,38 +14,22 @@
 <script>
 import fillAssess from "../components/fillAssess";
 import { Toast } from "mint-ui";
+import {mapState, mapMutations} from 'vuex';
 export default {
   name: "myAssess",
   data() {
     return {
-      scoreAndSummaryList: [
-        {
-          score: "",
-          summary: "",
-          hadShow: 1
-        }
-      ]
+      
     };
   },
+  computed: {
+    ...mapState(['scoreAndSummaryList'])
+  },
   methods: {
-    addNewContent() {
-      this.scoreAndSummaryList.push({
-        score: "",
-        summary: "",
-        hadShow: 1
-      });
-    },
-    deleteArrIndex(index) {
-      this.$set(this.scoreAndSummaryList, index, null);
-      this.scoreAndSummaryList.filter(v=>v);
-      // this.scoreAndSummaryList.splice(index, 1);
-      // console.log(this.scoreAndSummaryList);
-    },
-    allSubmit() {
-      console.log(this.scoreAndSummaryList);
-    }
+    ...mapMutations(['addNewContent'])
   },
   components: {
+    
     fillAssess
   }
 };

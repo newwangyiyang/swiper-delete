@@ -1,5 +1,5 @@
 <template>
-  <div class="fill_lis" v-show="tempData.hadShow">
+  <div class="fill_lis">
       <div class="fill_body" v-if="!hadSumTrue">
           <textarea v-model.trim="tempData.summary" placeholder="~请填写您本月的工作总结" rows="6"></textarea>
       </div>
@@ -10,7 +10,7 @@
           </div>
           <a href="javascript:;" @click="submitConten(index)">提交本条</a>
       </div>
-      <leftDeleteCom v-if="hadSumTrue" :index="index" @deleteOne="getDeleteIndex">
+      <leftDeleteCom v-if="hadSumTrue" :index="index">
           <div class="sum_show" :class="['bounce', {'animated': hadSumTrue}]">
                 <p>第 {{index+1}} 条</p>
                 <p>{{tempData.summary}}</p>
@@ -56,9 +56,6 @@ export default {
     },
     reEdit() {
       this.hadSumTrue = false;
-    },
-    getDeleteIndex(index) {
-        this.$emit('deleteArrIndex', index);
     }
   },
   components: {
