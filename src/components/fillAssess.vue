@@ -41,7 +41,7 @@ export default {
   },
   watch: {
     tempData(newValue) {
-      this.$emit('update:sonData', newValue);
+      this.$emit("update:sonData", newValue);
     }
   },
   methods: {
@@ -59,7 +59,7 @@ export default {
     }
   },
   components: {
-      leftDeleteCom
+    leftDeleteCom
   }
 };
 </script>
