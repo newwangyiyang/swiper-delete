@@ -2,7 +2,7 @@
   <div class="static_wrap">
       <ul class="static_son">
           <li>
-              <p>市场服务</p>
+              <p>市场服务:</p>
               <p>积极主动为市场一线提供支持服务、无拖延与推诿现象;</p>
               <p>无客户投诉得10分；每出现一次客户服务投诉扣2分，出现紧急情况不及时上报处理、隐瞒实情扣10分。</p>
               <div>
@@ -25,9 +25,12 @@ export default {
 
 <style lang="less" scoped>
 .static_wrap {
+    min-height: 100vh;
+    background-color: #f0f0f0;
   .static_son {
     li {
       padding: 25px;
+      background-color: #fff;
       >p {
         line-height: 50px;
         border-bottom: 1px solid #39b2ff;
@@ -43,7 +46,7 @@ export default {
             font-size: 26px;
             display: flex;
             flex-direction: column;
-            padding-left: 30px;
+            padding-left: 50px;
             >span {
                 font-size: 28px;
             }
