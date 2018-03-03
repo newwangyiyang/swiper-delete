@@ -23,6 +23,7 @@
       <div class="submit_all_btn" @click="fourBtn">
           <a href="javascript:;">提交全部</a>
       </div>
+      
   </div>
 </template>
 
