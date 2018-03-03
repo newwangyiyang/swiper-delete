@@ -21,6 +21,13 @@ export default new Vuex.Store({
     },
     deleteArrIndex(state, index) {
       state.scoreAndSummaryList.splice(index, 1);
-    }
+    },
+    // getAllScore(state) {
+    //   let allS = 0;
+    //   this.scoreAndSummaryList.forEach((v, i)=>{
+    //     allS += +score;
+    //   });
+    //   console.log(allS);
+    // }
   }
 });

@@ -1,14 +1,14 @@
 <template>
   <div class="fill_lis">
       <div class="fill_body" v-if="!hadSumTrue">
-          <textarea v-model.trim="tempData.summary" placeholder="~请填写您本月的工作总结" rows="6"></textarea>
+          <textarea v-model.trim="sumText" placeholder="~请填写您本月的工作总结" rows="6"></textarea>
       </div>
       <div class="fill_bot" v-if="!hadSumTrue">
           <div class="fill_num">
-              <input type="tel" v-model.trim="tempData.score">
+              <input type="tel" v-model.trim="sumScore">
               <span>请对该项填写您的评分</span>
           </div>
-          <a href="javascript:;" @click="submitConten(index)">提交本条</a>
+          <a href="javascript:;" @click="submitConten(index)">保存</a>
       </div>
       <leftDeleteCom v-if="hadSumTrue" :index="index">
           <div class="sum_show" :class="['bounce', {'animated': hadSumTrue}]">
@@ -25,23 +25,37 @@
 
 <script>
 import { Toast } from "mint-ui";
-
+import {mapState} from 'vuex';
 import leftDeleteCom from "./leftDeleteCom";
 export default {
   name: "fillAssess",
   data() {
     return {
       hadSumTrue: 0,
-      tempData: {}
+      tempData: {},
+      sumText: '',
+      sumScore: '',
     };
+  },
+  computed: {
+    ...mapState(['scoreAndSummaryList'])
   },
   props: ["index", "indexData"],
   mounted() {
     this.tempData = this.indexData;
   },
   watch: {
-    tempData(newValue) {
-      this.$emit("update:sonData", newValue);
+    sumText(nv) {
+      let obj = this.tempData;
+      obj.summary = nv;
+      this.tempData = obj;
+      this.$set(this.scoreAndSummaryList, this.index, obj);
+    },
+    sumScore(nv) {
+      let obj = this.tempData;
+      obj.score = nv;
+      this.tempData = obj;
+      this.$set(this.scoreAndSummaryList, this.index, obj);
     }
   },
   methods: {

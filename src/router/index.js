@@ -6,17 +6,17 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/1',
+      path: '/',
       name: 'login',
       component: resolve => require(['../views/login'], resolve)
     },
     {
-      path: '/2',
+      path: '/1',
       name: 'myAssess',
       component: resolve => require(['../views/myAssess'], resolve)
     },
     {
-      path: '/',
+      path: '/2',
       name: 'staticFourth',
       component: resolve => require(['../views/staticFourth'], resolve)
     }

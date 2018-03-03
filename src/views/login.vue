@@ -16,7 +16,7 @@
             <span>{{popupObj.popupText}}</span>
         </div>
     </mt-popup>
-    <button class="login_btn">登录</button>
+    <button class="login_btn" @click="login">登录</button>
   </div>
 </template>
 
@@ -50,6 +50,9 @@ export default {
   },
   created() {},
   methods: {
+    login() {
+      this.$router.push({name: 'myAssess'});
+    },
     getCode() {
       let codeNum = 60;
       let timer = setInterval(() => {
