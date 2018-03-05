@@ -151,6 +151,7 @@ export default {
 .static_wrap {
   min-height: 100vh;
   background-color: #f0f0f0;
+  font-size: 26px;
   .last_score {
     position: fixed;
     height: 120px;
@@ -219,6 +220,7 @@ export default {
               width: 100px;
               text-align: center;
               border-radius: 10px;
+              font-size: 28px;
             }
           }
         }

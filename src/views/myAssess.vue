@@ -73,6 +73,7 @@ export default {
 <style lang="less" scoped>
 .assess_wrap {
   overflow: hidden;
+  font-size: 26px;
   .last_score {
     position: fixed;
     z-index: 999;

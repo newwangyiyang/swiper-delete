@@ -131,6 +131,7 @@ export default {
         width: 400px;
         padding-left: 20px;
         border-radius: 10px;
+        font-size: 26px;
       }
       > button {
         position: absolute;
