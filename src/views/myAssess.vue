@@ -1,8 +1,6 @@
 <template>
   <div class="assess_wrap">
-    <div :class="['last_score', 'rubberBand', 'animated', {'notSub': lastScoreObj.notSub}]" v-if="lastScoreObj.lastScoreShow">
-          <a href="javascript:;">剩{{lastScoreObj.lastScore}}分</a>
-      </div>
+      <countScore :allScore="'60'"/>
       <div class="fill_tit">
           <span>填写您的工作总结</span>
           <span @click="addNewContent">再添加一条</span>
@@ -29,19 +27,13 @@
 
 <script>
 import fillAssess from "../components/fillAssess";
+import countScore from "../components/countScore";
 import { Toast } from "mint-ui";
 import { mapState, mapMutations } from "vuex";
 export default {
   name: "myAssess",
   data() {
-    return {
-      lastScoreObj: {
-        lastScoreShow: 0,
-        lastScore: 60,
-        notSub: 0
-      },
-      allScore: 0
-    };
+    return {};
   },
   computed: {
     ...mapState(["scoreAndSummaryList"])
@@ -52,20 +44,9 @@ export default {
       this.$router.push({name: 'staticFourth'});
     }
   },
-  watch: {
-    scoreAndSummaryList() {
-      let allS = 0;
-      this.scoreAndSummaryList.forEach((v, i) => {
-        allS += +v.score;
-      });
-      this.allScore = allS;
-      this.lastScoreObj.lastScoreShow = 1;
-      this.lastScoreObj.lastScore = 60 - this.allScore;
-      this.lastScoreObj.notSub = this.allScore >= 60 ? 1 : 0;
-    }
-  },
   components: {
-    fillAssess
+    fillAssess,
+    countScore
   }
 };
 </script>
@@ -74,27 +55,6 @@ export default {
 .assess_wrap {
   overflow: hidden;
   font-size: 26px;
-  .last_score {
-    position: fixed;
-    z-index: 999;
-    height: 120px;
-    width: 120px;
-    border-radius: 50%;
-    background-color: #39b2ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    left: 30px;
-    top: 30px;
-    opacity: 0.7;
-    a {
-      color: #fff;
-      font-size: 32px;
-    }
-    &.notSub {
-      background-color: #e74c3c;
-    }
-  }
   > .fill_tit {
     height: 80px;
     display: flex;

@@ -1,8 +1,6 @@
 <template>
   <div class="static_wrap">
-      <div :class="['last_score', 'rubberBand', 'animated', {'notSub': lastScoreObj.notSub}]" v-if="lastScoreObj.lastScoreShow">
-          <a href="javascript:;">剩{{lastScoreObj.lastScore}}分</a>
-      </div>
+      <countScore :allScore="'40'" />
       <ul class="static_son">
           <li>
               <p>市场服务(10分):</p>
@@ -10,7 +8,7 @@
               <p class="end_pra">无客户投诉得10分；每出现一次客户服务投诉扣2分，出现紧急情况不及时上报处理、隐瞒实情扣10分。</p>
               <div>
                   <span>自评分</span>
-                  <input type="tel" v-model.number="scoreOne">
+                  <input type="tel" v-model.number="scoreOneOwn">
               </div>
           </li>
           <li class="middle_box">
@@ -36,7 +34,7 @@
               <p class="end_pra">出色：9--10分；基本满意：8--8.9分；一般：6--7.9分；有问题：4--5.9分；危险：2～3.9分。</p>
               <div>
                   <span>自评分</span>
-                  <input type="tel" v-model.number="scoreTwo">
+                  <input type="tel" v-model.number="scoreTwoOwn">
               </div>
           </li>
       </ul>
@@ -51,51 +49,19 @@
 import "swiper/dist/css/swiper.css";
 import { Toast } from "mint-ui";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
+import countScore from '../components/countScore';
+import {mapState, mapMutations} from 'vuex';
 export default {
   name: "staticFourth",
   data() {
     return {
-      scoreOne: "",
-      scoreTwo: "",
       swiperOptionNav: {
         slidesPerView: 4
       },
       swiperOption: {},
-      navData: ["执行力", "业务技能", "工作责任心", "纪律性"],
-      itemData: [
-        {
-          p1: "积极主动、无条件的按时高质量的完成各项工作任务。 ",
-          p2:
-            "评分标准：出色，无可挑剔(超群级)：4.6--5分；满意, 达标(优秀级)：4--4.5分；一般，有待改进（较好级)：3--3.9分；有问题,需加注意(较差级)：2--2.9分；危险,不合格(很差级)：0～1.9分。",
-          score: ""
-        },
-        {
-          p1:
-            "掌握并熟练应用岗位所需专业知识和技能,以顺利开展工作、解决问题,并不断提升个人业务技能。",
-          p2:
-            "评分标准：出色，无可挑剔(超群级)：4.6--5分；满意, 达标(优秀级)：4--4.5分；一般，有待改进（较好级)：3--3.9分；有问题,需加注意(较差级)：2--2.9分；危险,不合格(很差级)：0～1.9分。",
-          score: ""
-        },
-        {
-          p1: "勇于承担责任，踏实工作，一丝不苟，坚持原则。",
-          p2:
-            "评分标准：出色，无可挑剔(超群级)：4.6--5分；满意, 达标(优秀级)：4--4.5分；一般，有待改进（较好级)：3--3.9分；有问题,需加注意(较差级)：2--2.9分；危险,不合格(很差级)：0～1.9分。",
-          score: ""
-        },
-        {
-          p1: "理解并遵守公司的各项规章制度以及领导的指示、命令。",
-          p2:
-            "评分标准：出色，无可挑剔(超群级)：4.6--5分；满意, 达标(优秀级)：4--4.5分；一般，有待改进（较好级)：3--3.9分；有问题,需加注意(较差级)：2--2.9分；危险,不合格(很差级)：0～1.9分。",
-          score: ""
-        }
-      ],
       activeMyIndex: 0,
-      allScore: 0,
-      lastScoreObj: {
-        lastScoreShow: 0,
-        lastScore: 40,
-        notSub: 0
-      }
+      scoreOneOwn: '',
+      scoreTwoOwn: ''
     };
   },
   computed: {
@@ -104,23 +70,24 @@ export default {
     },
     swiper2() {
       return this.$refs.mySwiper.swiper;
-    }
+    },
+    ...mapState(['scoreOne', 'scoreTwo', 'navData', 'itemData'])
   },
   components: {
     swiper,
-    swiperSlide
+    swiperSlide,
+    countScore
   },
   updated() {
-    let midleS = 0;
-    this.itemData.forEach((v, i) => {
-      midleS += +v.score;
-    });
-    this.allScore = +this.scoreOne + +this.scoreTwo + +midleS;
-    this.lastScoreObj.lastScoreShow = 1;
-    this.lastScoreObj.lastScore = 40 - this.allScore;
-    this.lastScoreObj.notSub = this.allScore >= 40 ? 1 : 0;
+    let obj = {
+      s: 40,
+      a: this.scoreOneOwn,
+      b: this.scoreTwoOwn
+    };
+    this.getHadFourthScore(obj);
   },
   methods: {
+    ...mapMutations(['getHadFourthScore']),
     goNav(index) {
       this.activeMyIndex = index;
       this.swiper2.slideTo(index);
@@ -133,11 +100,11 @@ export default {
       this.itemData.forEach((v, i) => {
         flag = !v.score ? 0 : 1;
       });
-      if (!this.scoreOne) {
+      if (!this.scoreOneOwn) {
         Toast("您还未对服务市场板块进行打分");
       } else if (!flag) {
         Toast("您还未对态度能力板块进行打分");
-      } else if (!this.scoreTwo) {
+      } else if (!this.scoreTwoOwn) {
         Toast("您还未对学习与成长板块进行打分");
       } else {
         console.log(this.allScore);
@@ -152,26 +119,6 @@ export default {
   min-height: 100vh;
   background-color: #f0f0f0;
   font-size: 26px;
-  .last_score {
-    position: fixed;
-    height: 120px;
-    width: 120px;
-    border-radius: 50%;
-    background-color: #39b2ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    left: 30px;
-    top: 30px;
-    opacity: 0.7;
-    a {
-      color: #fff;
-      font-size: 32px;
-    }
-    &.notSub {
-      background-color: #e74c3c;
-    }
-  }
   .static_son {
     li {
       padding: 25px;
