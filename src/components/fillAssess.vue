@@ -61,7 +61,10 @@ export default {
   methods: {
     submitConten(index) {
       if (!this.tempData.summary) {
-        Toast("请填写您本月的工作总结");
+        Toast({
+          message: "请填写您本月的工作总结",
+          duration: 50000
+        });
       } else if (!this.tempData.score) {
         Toast("请对该项填写您的评分");
       } else {
@@ -143,4 +146,6 @@ export default {
     }
   }
 }
+
+
 </style>
