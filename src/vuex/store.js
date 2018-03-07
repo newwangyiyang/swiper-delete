@@ -6,13 +6,18 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     scoreAndSummaryList: [{
-      score: "",
-      summary: "",
+      score: '',
+      scoreOwn: '',
+      summary: '',
+      hadSumTrue: '',
       _id: Math.random()
     }],
     sixthAndFourthScore: 0,
     //40分逻辑
     navData: ["执行力", "业务技能", "工作责任心", "纪律性"],
+    oneSObj: {
+      score: ''
+    },
     itemData: [{
         p1: "积极主动、无条件的按时高质量的完成各项工作任务。 ",
         p2: "评分标准：出色，无可挑剔(超群级)：4.6--5分；满意, 达标(优秀级)：4--4.5分；一般，有待改进（较好级)：3--3.9分；有问题,需加注意(较差级)：2--2.9分；危险,不合格(很差级)：0～1.9分。",
@@ -34,13 +39,18 @@ export default new Vuex.Store({
         score: ""
       }
     ],
+    threeSObj: {
+      score: ''
+    },
     fourthScore: 0
   },
   mutations: {
     addNewContent(state) {
       state.scoreAndSummaryList.push({
-        score: "",
-        summary: "",
+        score: '',
+        scoreOwn: '',
+        summary: '',
+        hadSumTrue: '',
         _id: Math.random()
       });
     },
@@ -54,12 +64,12 @@ export default new Vuex.Store({
       });
       state.sixthAndFourthScore = allScore - allS;
     },
-    getHadFourthScore(state, obj) {
+    getHadFourthScore(state, allScore) {
       let allS = 0;
       state.itemData.forEach((v, i) => {
         allS += +v.score;
       });
-      state.fourthScore = obj.s - allS - obj.a - obj.b;
+      state.fourthScore = allScore - allS - state.oneSObj.score - state.threeSObj.score;
     }
   }
 });

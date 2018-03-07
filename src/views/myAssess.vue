@@ -1,6 +1,6 @@
 <template>
-  <div class="assess_wrap">
-      <countScore :allScore="'60'"/>
+  <div class="assess_wrap"> 
+      <countScore :allScore="sixthAndFourthScore" :notSub="notSub" :lastScoreShow="lastScoreShow"/>
       <div class="fill_tit">
           <span>填写您的工作总结</span>
           <span @click="addNewContent">再添加一条</span>
@@ -33,10 +33,19 @@ import { mapState, mapMutations } from "vuex";
 export default {
   name: "myAssess",
   data() {
-    return {};
+    return {
+      lastScoreShow: 0,
+      notSub: 0
+    };
   },
   computed: {
-    ...mapState(["scoreAndSummaryList"])
+    ...mapState(["scoreAndSummaryList", "sixthAndFourthScore"])
+  },
+  watch: {
+    sixthAndFourthScore(nv) {
+      this.notSub = nv < 0 ? 1 : 0;
+      this.lastScoreShow = 1;
+    }
   },
   methods: {
     ...mapMutations(["addNewContent"]),

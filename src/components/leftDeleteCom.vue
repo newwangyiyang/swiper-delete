@@ -10,7 +10,7 @@
         <!-- 插槽中放具体项目中需要内容     -->  
           <slot></slot>
           </div>
-          <div class="remove" ref='remove' @click.stop="deleteArrIndex(index)">
+          <div class="remove" ref='remove' @click.stop="updateList(index)">
             删除
           </div>
       </div>
@@ -49,7 +49,7 @@
 }
 </style>
 <script>
-import {mapMutations} from 'vuex';
+import {mapState,mapMutations} from 'vuex';
 export default {
   data() {
     return {
@@ -59,6 +59,9 @@ export default {
       disX: 0, //移动距离
       deleteSlider: "" //滑动时的效果,使用v-bind:style="deleteSlider"
     };
+  },
+  computed: {
+    ...mapState(['scoreAndSummaryList'])
   },
   methods: {
     touchStart(ev) {
@@ -112,7 +115,11 @@ export default {
         }
       }
     },
-    ...mapMutations(['deleteArrIndex'])
+    updateList(index) {
+      this.deleteArrIndex(index);
+      this.getHadSixthScore(60);
+    },
+    ...mapMutations(['deleteArrIndex', 'getHadSixthScore'])
   },
   props: ["index"]
 };

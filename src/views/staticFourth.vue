@@ -1,18 +1,18 @@
 <template>
   <div class="static_wrap">
-      <countScore :allScore="'40'" />
+      <countScore :allScore="fourthScore" :notSub="notSub" :lastScoreShow="lastScoreShow" />
       <ul class="static_son">
           <li>
-              <p>市场服务(10分):</p>
+              <p>市场服务(权重10分):</p>
               <p>积极主动为市场一线提供支持服务、无拖延与推诿现象;</p>
               <p class="end_pra">无客户投诉得10分；每出现一次客户服务投诉扣2分，出现紧急情况不及时上报处理、隐瞒实情扣10分。</p>
               <div>
                   <span>自评分</span>
-                  <input type="tel" v-model.number="scoreOneOwn">
+                  <input type="tel" v-model.number="oneSObj.score">
               </div>
           </li>
           <li class="middle_box">
-            <p>态度能力(20分): 每项5分</p>
+            <p>态度能力(20分): 每项权重5分</p>
             <swiper :options="swiperOptionNav" ref="mySwiperNav" class="nav_box">
                 <!-- slides -->
                 <swiper-slide @click.native="goNav(index)" :class="{'active': index === activeMyIndex}" v-for="(item, index) in navData" :key="index">{{item}}</swiper-slide>
@@ -29,12 +29,12 @@
             </swiper>
           </li>
           <li>
-              <p>学习与成长(10分):</p>
+              <p>学习与成长(权重10分):</p>
               <p>加强个人学习，不断提升业务技能和综合能力，并运用于工作中，积极主动改进工作，提高工作效率。</p>
               <p class="end_pra">出色：9--10分；基本满意：8--8.9分；一般：6--7.9分；有问题：4--5.9分；危险：2～3.9分。</p>
               <div>
                   <span>自评分</span>
-                  <input type="tel" v-model.number="scoreTwoOwn">
+                  <input type="tel" v-model.number="threeSObj.score">
               </div>
           </li>
       </ul>
@@ -60,8 +60,9 @@ export default {
       },
       swiperOption: {},
       activeMyIndex: 0,
-      scoreOneOwn: '',
-      scoreTwoOwn: ''
+
+      notSub: 0,
+      lastScoreShow: 0
     };
   },
   computed: {
@@ -71,7 +72,7 @@ export default {
     swiper2() {
       return this.$refs.mySwiper.swiper;
     },
-    ...mapState(['scoreOne', 'scoreTwo', 'navData', 'itemData'])
+    ...mapState(['oneSObj', 'threeSObj', 'navData', 'itemData', 'fourthScore'])
   },
   components: {
     swiper,
@@ -79,12 +80,13 @@ export default {
     countScore
   },
   updated() {
-    let obj = {
-      s: 40,
-      a: this.scoreOneOwn,
-      b: this.scoreTwoOwn
-    };
-    this.getHadFourthScore(obj);
+    this.getHadFourthScore(40);
+  },
+  watch: {
+    fourthScore(nv) {
+      this.notSub = nv < 0 ? 1 : 0;
+      this.lastScoreShow = 1;
+    }
   },
   methods: {
     ...mapMutations(['getHadFourthScore']),
@@ -118,7 +120,6 @@ export default {
 .static_wrap {
   min-height: 100vh;
   background-color: #f0f0f0;
-  font-size: 26px;
   .static_son {
     li {
       padding: 25px;
@@ -208,6 +209,7 @@ export default {
           width: 100px;
           text-align: center;
           border-radius: 10px;
+          font-size: 26px;
         }
       }
     }

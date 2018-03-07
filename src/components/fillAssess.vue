@@ -1,21 +1,26 @@
 <template>
   <div class="fill_lis">
-      <div class="fill_body" v-if="!hadSumTrue">
-          <textarea v-model.trim="sumText" placeholder="~请填写您本月的工作总结" rows="6"></textarea>
+      <div class="fill_body" v-if="!scoreAndSummaryList[index].hadSumTrue">
+          <textarea v-model.trim="scoreAndSummaryList[index].summary" placeholder="~请填写您本月的工作总结" rows="6"></textarea>
       </div>
-      <div class="fill_bot" v-if="!hadSumTrue">
+      <div class="fill_bot" v-if="!scoreAndSummaryList[index].hadSumTrue">
           <div class="fill_num">
-              <input type="tel" v-model.trim="sumScore">
-              <span>请对该项填写您的评分</span>
+              <input type="tel" v-model.trim="scoreAndSummaryList[index].score">
+              <span>权重</span>
           </div>
-          <a href="javascript:;" @click="submitConten(index)">保存</a>
+          <div class="fill_num">
+              <input type="tel" v-model.trim="scoreAndSummaryList[index].scoreOwn">
+              <span>自评分</span>
+          </div>
+          <a href="javascript:;" @click="submitConten(index)" :class="{'not_save': scoreBigOwn}">保存</a>
       </div>
-      <leftDeleteCom v-if="hadSumTrue" :index="index">
-          <div class="sum_show" :class="['bounce', {'animated': hadSumTrue}]">
+      <leftDeleteCom v-if="scoreAndSummaryList[index].hadSumTrue" :index="index">
+          <div class="sum_show" :class="['bounce', {'animated': scoreAndSummaryList[index].hadSumTrue}]">
                 <p>第 {{index+1}} 条</p>
-                <p>{{tempData.summary}}</p>
+                <p>{{scoreAndSummaryList[index].summary}}</p>
                 <div class="sum_bom">
-                    <span>{{tempData.score}}</span>
+                    <span>权重:{{scoreAndSummaryList[index].score}}</span>
+                    <span>自评分:{{scoreAndSummaryList[index].scoreOwn}}</span>
                     <a href="javascript:;" @click="reEdit">重新编辑</a>
                 </div>
             </div>
@@ -25,54 +30,41 @@
 
 <script>
 import { Toast } from "mint-ui";
-import {mapState} from 'vuex';
+import {mapState, mapMutations} from 'vuex';
 import leftDeleteCom from "./leftDeleteCom";
 export default {
   name: "fillAssess",
   data() {
     return {
-      hadSumTrue: 0,
-      tempData: {},
-      sumText: '',
-      sumScore: '',
+      scoreBigOwn: 0, //自评分大于权重
     };
   },
   computed: {
     ...mapState(['scoreAndSummaryList'])
   },
   props: ["index", "indexData"],
-  mounted() {
-    this.tempData = this.indexData;
-  },
-  watch: {
-    sumText(nv) {
-      let obj = this.tempData;
-      obj.summary = nv;
-      this.tempData = obj;
-      this.$set(this.scoreAndSummaryList, this.index, obj);
-    },
-    sumScore(nv) {
-      let obj = this.tempData;
-      obj.score = nv;
-      this.tempData = obj;
-      this.$set(this.scoreAndSummaryList, this.index, obj);
-    }
+  updated() {
+    let score = this.scoreAndSummaryList[this.index].score;
+    let scoreOwn = this.scoreAndSummaryList[this.index].scoreOwn;
+    this.scoreBigOwn = Number(score) >= Number(scoreOwn) ? 0 : 1;
+    this.getHadSixthScore(60);
   },
   methods: {
+    ...mapMutations(['getHadSixthScore']),
     submitConten(index) {
-      if (!this.tempData.summary) {
-        Toast({
-          message: "请填写您本月的工作总结",
-          duration: 50000
-        });
-      } else if (!this.tempData.score) {
+      if(this.scoreBigOwn) {
+        Toast('自评分数不能大于权重分数');
+      }else if (!this.scoreAndSummaryList[this.index].summary) {
+        Toast('请填写您本月的工作总结');
+      } else if (!this.scoreAndSummaryList[this.index].score) {
         Toast("请对该项填写您的评分");
       } else {
-        this.hadSumTrue = 1;
+        this.scoreAndSummaryList[this.index].hadSumTrue = 1;
       }
     },
     reEdit() {
-      this.hadSumTrue = false;
+      console.log(11);
+      this.scoreAndSummaryList[this.index].hadSumTrue = 0;
     }
   },
   components: {
@@ -121,6 +113,9 @@ export default {
       background-color: #39b2ff;
       color: #fff;
       padding: 0 40px;
+      &.not_save {
+        background-color: #95a5a6;
+      }
     }
   }
   .sum_show {
