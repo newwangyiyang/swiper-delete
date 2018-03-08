@@ -12,8 +12,8 @@ import '../static/css/animate.css';
 import axios from './axios/http';
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
-
-
+//引用vuw-wechat-title组件
+Vue.use(require('vue-wechat-title'))
 import store from './vuex/store.js';
 /* eslint-disable no-new */
 new Vue({

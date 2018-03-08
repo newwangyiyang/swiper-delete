@@ -40,7 +40,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['scoreAndSummaryList'])
+    ...mapState(['scoreAndSummaryList', 'nihao'])
   },
   props: ["index", "indexData"],
   updated() {
